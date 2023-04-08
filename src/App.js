@@ -99,7 +99,11 @@ function App() {
               {/* only render below for one time */}
               {index === 0 && (
                 <>
-                  <SwitchTaxButton taxMode={taxMode} setTaxMode={setTaxMode} />
+                  <SwitchTaxButton
+                    IncomeInputList={IncomeInputList}
+                    taxMode={taxMode}
+                    setTaxMode={setTaxMode}
+                  />
                   {DEDUCT_LIST.map((item, index) => (
                     <DeductInput key={index} title={item} />
                   ))}

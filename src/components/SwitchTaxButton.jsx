@@ -15,23 +15,20 @@ const Button = styled.button`
   cursor: pointer;
 `;
 
-export default function SwitchTaxButton({ taxMode, setTaxMode }) {
-  const taxButtonHandler = (mode) => {
-    if (mode === "gross") {
-      setTaxMode("net");
-    } else if (mode === "net") {
-      setTaxMode("gross");
-    }
+export default function SwitchTaxButton({
+  IncomeInputList,
+  taxMode,
+  setTaxMode,
+}) {
+  const switchButtonHandler = () => {
+    const unselectedInput = IncomeInputList.find((item) => item.id !== taxMode);
+    setTaxMode(unselectedInput.id);
   };
 
   return (
     <>
       <Container>
-        <Button
-          onClick={() => {
-            taxButtonHandler(taxMode);
-          }}
-        >
+        <Button onClick={switchButtonHandler}>
           {taxMode === "gross" ? "上" : "下"}
         </Button>
       </Container>
