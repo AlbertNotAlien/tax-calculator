@@ -1,4 +1,4 @@
-[demo link](https://albertnotalien.github.io/tax-calculator/)
+[demo link](https://tax-calculator-iota.vercel.app/)
 
 # Getting Started with Create React App
 
