@@ -21,11 +21,11 @@ const Button = styled.button`
   }
 `;
 
-export default function SubmitButton({ countTax }) {
+export default function SubmitButton({ renderTaxValue }) {
   return (
     <>
       <Container>
-        <Button onClick={countTax}>結算</Button>
+        <Button onClick={renderTaxValue}>結算</Button>
       </Container>
     </>
   );

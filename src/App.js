@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState } from "react";
 import "./reset.css";
 import styled from "@emotion/styled";
 import { valueToNumber, numberAddComma } from "./utils/typeConvert";
@@ -32,27 +32,48 @@ const Main = styled.div`
   padding: 0px 50px;
 `;
 
+const deductList = ["-代扣所得稅", "-補充健保費"];
+const GROSS_TO_NET_COEFFICIENT = 0.9;
+const NET_TO_GROSS_COEFFICIENT = 1 / GROSS_TO_NET_COEFFICIENT;
+
 function App() {
   const [grossTax, setGrossTax] = useState("0");
   const [netTax, setNetTax] = useState("0");
   const [taxMode, setTaxMode] = useState("gross");
 
-  const deductArray = ["-代扣所得稅", "-補充健保費"];
+  const IncomeInputList = [
+    {
+      id: "gross",
+      title: "所得金額",
+      subtitle: "報價或預算金額",
+      taxValue: grossTax,
+      setTaxValue: setGrossTax,
+      coefficient: GROSS_TO_NET_COEFFICIENT,
+    },
+    {
+      id: "net",
+      title: "實得金額",
+      subtitle: "扣完可實拿金額",
+      taxValue: netTax,
+      setTaxValue: setNetTax,
+      coefficient: NET_TO_GROSS_COEFFICIENT,
+    },
+  ];
 
-  const countTax = () => {
-    if (taxMode === "gross") {
-      const inputValue = valueToNumber(grossTax);
-      const resultValue = inputValue * 0.9;
-      const result = numberAddComma(resultValue);
+  const calculateTax = (taxValue, coefficient) => {
+    const taxValueNumber = valueToNumber(taxValue);
+    const calculatedValue = Math.floor(taxValueNumber * coefficient);
+    return numberAddComma(calculatedValue);
+  };
 
-      setNetTax(result);
-    } else if (taxMode === "net") {
-      const inputValue = valueToNumber(netTax);
-      const resultValue = inputValue / 0.9;
-      const result = numberAddComma(resultValue);
-
-      setGrossTax(result);
-    }
+  const renderTaxValue = () => {
+    const selectedInput = IncomeInputList.find((input) => input.id === taxMode);
+    const targetInput = IncomeInputList.find((input) => input.id !== taxMode);
+    const calculatedValue = calculateTax(
+      selectedInput.taxValue,
+      selectedInput.coefficient
+    );
+    targetInput.setTaxValue(calculatedValue);
   };
 
   return (
@@ -61,29 +82,30 @@ function App() {
         <Container>
           <Header />
           <Main>
-            <IncomeInputField
-              id="gross"
-              title="所得金額"
-              subtitle="報價或預算金額"
-              taxMode={taxMode}
-              taxValue={grossTax}
-              setTaxValue={setGrossTax}
-            />
-            <SwitchTaxButton taxMode={taxMode} setTaxMode={setTaxMode} />
-
-            {deductArray.map((item) => (
-              <DeductInput title={item} />
+            {IncomeInputList.map((item, index) => (
+              <div key={item.id}>
+                <IncomeInputField
+                  id={item.id}
+                  title={item.title}
+                  subtitle={item.subtitle}
+                  taxValue={item.taxValue}
+                  setTaxValue={item.setTaxValue}
+                  taxMode={taxMode}
+                />
+                {index === 0 && (
+                  <>
+                    <SwitchTaxButton
+                      taxMode={taxMode}
+                      setTaxMode={setTaxMode}
+                    />
+                    {deductList.map((item, index) => (
+                      <DeductInput key={index} title={item} />
+                    ))}
+                  </>
+                )}
+              </div>
             ))}
-
-            <IncomeInputField
-              id="net"
-              title="實得金額"
-              subtitle="扣完可實拿金額"
-              taxMode={taxMode}
-              taxValue={netTax}
-              setTaxValue={setNetTax}
-            />
-            <SubmitButton countTax={countTax} />
+            <SubmitButton renderTaxValue={renderTaxValue} />
           </Main>
         </Container>
       </Background>
