@@ -6,6 +6,7 @@ import Header from "./components/Header";
 import IncomeInputField from "./components/IncomeInputField";
 import SwitchTaxButton from "./components/SwitchTaxButton";
 import SubmitButton from "./components/SubmitButton";
+import DeductInput from "./components/DeductInput";
 
 const Background = styled.div`
   width: 100vw;
@@ -31,9 +32,11 @@ const Main = styled.div`
 `;
 
 function App() {
-  const [grossTax, setGrossTax] = useState(0);
-  const [netTax, setNetTax] = useState(0);
+  const [grossTax, setGrossTax] = useState("0");
+  const [netTax, setNetTax] = useState("0");
   const [taxMode, setTaxMode] = useState("gross");
+
+  const deductArray = ["-代扣所得稅", "-補充健保費"];
 
   return (
     <div className="App">
@@ -50,6 +53,11 @@ function App() {
               setTaxValue={setGrossTax}
             />
             <SwitchTaxButton taxMode={taxMode} setTaxMode={setTaxMode} />
+
+            {deductArray.map((item) => (
+              <DeductInput title={item} />
+            ))}
+
             <IncomeInputField
               id="net"
               title="實得金額"
@@ -58,7 +66,13 @@ function App() {
               taxValue={netTax}
               setTaxValue={setNetTax}
             />
-            <SubmitButton />
+            <SubmitButton
+              taxMode={taxMode}
+              grossTax={grossTax}
+              setGrossTax={setGrossTax}
+              netTax={netTax}
+              setNetTax={setNetTax}
+            />
           </Main>
         </Container>
       </Background>
