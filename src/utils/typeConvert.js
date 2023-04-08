@@ -6,7 +6,6 @@ export function valueToNumber(inputValue) {
   if (!regex.test(integerValue)) return;
 
   const result = Number(integerValue);
-  console.log("valueToNumber", result);
 
   return result;
 }
@@ -14,6 +13,5 @@ export function valueToNumber(inputValue) {
 // result type is string with commas
 export function numberAddComma(value) {
   const result = value.toLocaleString("en-US");
-  console.log("numberAddComma", result);
   return result;
 }
