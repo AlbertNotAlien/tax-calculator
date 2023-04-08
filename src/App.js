@@ -77,39 +77,34 @@ function App() {
   };
 
   return (
-    <div className="App">
-      <Background>
-        <Container>
-          <Header />
-          <Main>
-            {IncomeInputList.map((item, index) => (
-              <div key={item.id}>
-                <IncomeInputField
-                  id={item.id}
-                  title={item.title}
-                  subtitle={item.subtitle}
-                  taxValue={item.taxValue}
-                  setTaxValue={item.setTaxValue}
-                  taxMode={taxMode}
-                />
-                {index === 0 && (
-                  <>
-                    <SwitchTaxButton
-                      taxMode={taxMode}
-                      setTaxMode={setTaxMode}
-                    />
-                    {deductList.map((item, index) => (
-                      <DeductInput key={index} title={item} />
-                    ))}
-                  </>
-                )}
-              </div>
-            ))}
-            <SubmitButton renderTaxValue={renderTaxValue} />
-          </Main>
-        </Container>
-      </Background>
-    </div>
+    <Background>
+      <Container>
+        <Header />
+        <Main>
+          {IncomeInputList.map((item, index) => (
+            <div key={item.id}>
+              <IncomeInputField
+                id={item.id}
+                title={item.title}
+                subtitle={item.subtitle}
+                taxValue={item.taxValue}
+                setTaxValue={item.setTaxValue}
+                taxMode={taxMode}
+              />
+              {index === 0 && (
+                <>
+                  <SwitchTaxButton taxMode={taxMode} setTaxMode={setTaxMode} />
+                  {deductList.map((item, index) => (
+                    <DeductInput key={index} title={item} />
+                  ))}
+                </>
+              )}
+            </div>
+          ))}
+          <SubmitButton renderTaxValue={renderTaxValue} />
+        </Main>
+      </Container>
+    </Background>
   );
 }
 
