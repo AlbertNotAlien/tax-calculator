@@ -1,8 +1,6 @@
 import React from "react";
 import styled from "@emotion/styled";
 
-import { valueToNumber, numberAddComma } from "../utils/typeConvert";
-
 const Container = styled.div``;
 const Button = styled.button`
   width: 100%;
@@ -23,29 +21,7 @@ const Button = styled.button`
   }
 `;
 
-export default function SubmitButton({
-  taxMode,
-  grossTax,
-  setGrossTax,
-  netTax,
-  setNetTax,
-}) {
-  const countTax = () => {
-    if (taxMode === "gross") {
-      const inputValue = valueToNumber(grossTax);
-      const resultValue = inputValue * 0.9;
-      const result = numberAddComma(resultValue);
-
-      setNetTax(result);
-    } else if (taxMode === "net") {
-      const inputValue = valueToNumber(netTax);
-      const resultValue = inputValue / 0.9;
-      const result = numberAddComma(resultValue);
-
-      setGrossTax(result);
-    }
-  };
-
+export default function SubmitButton({ countTax }) {
   return (
     <>
       <Container>

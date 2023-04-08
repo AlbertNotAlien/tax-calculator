@@ -1,6 +1,7 @@
 import { useState, useRef } from "react";
 import "./reset.css";
 import styled from "@emotion/styled";
+import { valueToNumber, numberAddComma } from "./utils/typeConvert";
 
 import Header from "./components/Header";
 import IncomeInputField from "./components/IncomeInputField";
@@ -38,6 +39,22 @@ function App() {
 
   const deductArray = ["-代扣所得稅", "-補充健保費"];
 
+  const countTax = () => {
+    if (taxMode === "gross") {
+      const inputValue = valueToNumber(grossTax);
+      const resultValue = inputValue * 0.9;
+      const result = numberAddComma(resultValue);
+
+      setNetTax(result);
+    } else if (taxMode === "net") {
+      const inputValue = valueToNumber(netTax);
+      const resultValue = inputValue / 0.9;
+      const result = numberAddComma(resultValue);
+
+      setGrossTax(result);
+    }
+  };
+
   return (
     <div className="App">
       <Background>
@@ -66,13 +83,7 @@ function App() {
               taxValue={netTax}
               setTaxValue={setNetTax}
             />
-            <SubmitButton
-              taxMode={taxMode}
-              grossTax={grossTax}
-              setGrossTax={setGrossTax}
-              netTax={netTax}
-              setNetTax={setNetTax}
-            />
+            <SubmitButton countTax={countTax} />
           </Main>
         </Container>
       </Background>
