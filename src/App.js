@@ -1,13 +1,13 @@
 import { useState } from "react";
-import "./reset.css";
 import styled from "@emotion/styled";
-import { valueToNumber, numberAddComma } from "./utils/typeConvert";
 
+import "./reset.css";
 import Header from "./components/Header";
 import IncomeInputField from "./components/IncomeInputField";
 import SwitchTaxButton from "./components/SwitchTaxButton";
 import SubmitButton from "./components/SubmitButton";
 import DeductInput from "./components/DeductInput";
+import { valueToNumber, numberAddComma } from "./utils/typeConvert";
 
 const Background = styled.div`
   width: 100vw;
@@ -32,7 +32,8 @@ const Main = styled.div`
   padding: 0px 50px;
 `;
 
-const deductList = ["-代扣所得稅", "-補充健保費"];
+// The values that do not need to be updated.
+const DEDUCT_LIST = ["-代扣所得稅", "-補充健保費"];
 const GROSS_TO_NET_COEFFICIENT = 0.9;
 const NET_TO_GROSS_COEFFICIENT = 1 / GROSS_TO_NET_COEFFICIENT;
 
@@ -66,14 +67,17 @@ function App() {
     return numberAddComma(calculatedValue);
   };
 
+  // Update the opponent's state with the values and coefficients of self's object.
   const renderTaxValue = () => {
     const selectedInput = IncomeInputList.find((input) => input.id === taxMode);
-    const targetInput = IncomeInputList.find((input) => input.id !== taxMode);
+    const unselectedInput = IncomeInputList.find(
+      (input) => input.id !== taxMode
+    );
     const calculatedValue = calculateTax(
       selectedInput.taxValue,
       selectedInput.coefficient
     );
-    targetInput.setTaxValue(calculatedValue);
+    unselectedInput.setTaxValue(calculatedValue);
   };
 
   return (
@@ -91,10 +95,12 @@ function App() {
                 setTaxValue={item.setTaxValue}
                 taxMode={taxMode}
               />
+
+              {/* only render below for one time */}
               {index === 0 && (
                 <>
                   <SwitchTaxButton taxMode={taxMode} setTaxMode={setTaxMode} />
-                  {deductList.map((item, index) => (
+                  {DEDUCT_LIST.map((item, index) => (
                     <DeductInput key={index} title={item} />
                   ))}
                 </>
